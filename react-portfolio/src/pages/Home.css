@@ -1,4 +1,8 @@
 /* reset / ensure no accidental padding on root/body */
+:root {
+  --bg-fallback: transparent;
+}
+
 html, body {
   height: 100%;
   margin: 0;
@@ -6,23 +10,21 @@ html, body {
 }
 
 /* ---------- Background layer - fixed & visible ---------- */
-/* Use z-index:0 (not negative) so it's not painted underneath page root */
 .bg-span {
   position: fixed;
   inset: 0;
   width: 100%;
   height: 100%;
-  z-index: 0;              /* <-- important: non-negative */
+  z-index: 0;
   pointer-events: none;
   overflow: hidden;
   contain: paint;
 }
 
-/* Force the inner to exactly match the viewport to avoid canvas clipping */
 .bg-span__inner,
 .bg-span__inner > * {
   width: 100%;
-  height: 100svh;          /* Use svh/ vh to be safe on mobile */
+  height: 100svh;
   min-height: 100vh;
   display: block;
 }
@@ -32,16 +34,17 @@ html, body {
   position: relative;
   z-index: 10;
   min-height: 100vh;
-  width: min(1200px, 80%);  /* choose a max width and allow shrink */
+  width: min(1200px, 80%);
   box-sizing: border-box;
   padding: 6rem 2rem;
-  margin: 0;                 /* parent handles centering */
+  margin: 0 auto;
   background: transparent;
   display: flex;
   justify-content: center;
 }
 
-.info-box{
+/* Info box (container) */
+.info-box {
   background-color: rgba(255, 255, 255, 0.048);
   border: solid 0.1px rgba(240, 109, 48, 0.534);
   border-radius: 30px;
@@ -49,7 +52,125 @@ html, body {
   padding-top: 40px;
   position: relative;
   top: 200px;
-  
-  width: 1400px;
-  height: 700px;
+  width: 100%;
+  max-width: 1100px; /* reasonable max, adapt as needed */
+  height: 640px;
+  overflow: hidden; /* important: hide scrollbars and native scroll */
+  box-sizing: border-box;
+}
+
+/* sections wrapper is full size (position:relative) */
+.sections {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+/* Each section is absolutely stacked and centered vertically within info-box */
+.section {
+  position: absolute;
+  inset: 0; /* top:0; right:0; bottom:0; left:0 */
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  padding: 40px 60px;
+  box-sizing: border-box;
+  transform: translateX(100%); /* default: offscreen right */
+  opacity: 0;
+  pointer-events: none;
+  will-change: transform, opacity;
+  transition: transform 600ms cubic-bezier(.2,.9,.3,1), opacity 300ms ease;
+}
+
+/* active section centered */
+.section.active {
+  transform: translateX(0%);
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* previous sections move left (outside view) */
+.section.prev {
+  transform: translateX(-100%);
+  opacity: 0.0;
+}
+
+/* next stays right (entrance position) */
+.section.next {
+  transform: translateX(100%);
+  opacity: 0.0;
+}
+
+/* Tweak heading & paragraph appearance */
+.section h1 {
+  margin: 0 0 18px 0;
+  color: #fff;
+  text-shadow: 0 2px 12px rgba(0,0,0,0.6);
+}
+
+.section p {
+  margin: 0;
+  color: rgba(255,255,255,0.85);
+  max-width: 60%;
+  line-height: 1.5;
+  font-size: 14px;
+}
+
+/* subtle decorative focus ring for keyboard nav */
+.section:focus {
+  outline: none;
+}
+
+/* Navigation dots in bottom-right corner (non-intrusive) */
+.nav-dots {
+  position: absolute;
+  right: 18px;
+  bottom: 18px;
+  display: flex;
+  gap: 8px;
+}
+
+.dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  border: 1px solid rgba(255,255,255,0.18);
+  background: rgba(255,255,255,0.04);
+  padding: 0;
+  cursor: pointer;
+  transition: transform 220ms ease, background 220ms ease;
+}
+
+.dot--active {
+  transform: scale(1.2);
+  background: rgba(240,109,48,0.9);
+  border-color: rgba(240,109,48,0.9);
+}
+
+/* responsiveness */
+@media (max-width: 900px) {
+  .info-box {
+    top: 120px;
+    height: 540px;
+    padding-left: 36px;
+    padding-top: 28px;
+  }
+  .section p {
+    max-width: 80%;
+    font-size: 13px;
+  }
+  .section h1 { font-size: 48px; }
+}
+
+@media (max-width: 520px) {
+  .info-box {
+    width: calc(100% - 32px);
+    padding-left: 20px;
+    padding-top: 20px;
+    border-radius: 18px;
+    height: 520px;
+  }
+  .section h1 { font-size: 40px; }
+  .section p { font-size: 14px; max-width: 100%; }
 }
