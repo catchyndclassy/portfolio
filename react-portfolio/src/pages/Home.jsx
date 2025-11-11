@@ -18,7 +18,7 @@ const SECTIONS = [
   },
   {
     title: "Contact",
-    body: "Say hi — we typically reply quickly and enjoy collaborative projects."
+    body: "I preserved your existing interaction logic (wheel, touch, keyboard) and accessibility attributes.Font names like Akira and Dimod are preserved but fallback fonts are included; ensure you load those custom fonts if you want their exact look.If you want a visible bezel (to mimic a laptop more strongly) I can add a darker outer frame around .device.If you want, I can also:Add a small resize handle or helper overlay that shows the current scaled pixel size for debugging.Change the aspect ratio to 16:10 (some laptops use that).Make the laptop viewport perfectly centered with a subtle bezel image.Want any of those tweaks?"
   }
 ];
 
@@ -34,29 +34,24 @@ export default function Home() {
   const scrollingRef = useRef(false);
   const touchStartYRef = useRef(null);
 
-  // clamp helper
   const clamp = (v, a, b) => Math.max(a, Math.min(v, b));
 
-  // change index with debounce lock to allow animation to complete
   const changeIndex = useCallback((next) => {
     if (scrollingRef.current) return;
     next = clamp(next, 0, SECTIONS.length - 1);
     if (next === index) return;
     scrollingRef.current = true;
     setIndex(next);
-    // match CSS transition duration (600ms)
     window.setTimeout(() => { scrollingRef.current = false; }, 650);
   }, [index]);
 
-  // wheel handler
   useEffect(() => {
     const el = boxRef.current;
     if (!el) return;
 
     const onWheel = (e) => {
-      // only react to vertical wheel
       if (Math.abs(e.deltaY) < Math.abs(e.deltaX)) return;
-      e.preventDefault(); // prevent page scroll
+      e.preventDefault();
       if (e.deltaY > 0) changeIndex(index + 1);
       else if (e.deltaY < 0) changeIndex(index - 1);
     };
@@ -65,7 +60,6 @@ export default function Home() {
     return () => el.removeEventListener("wheel", onWheel);
   }, [index, changeIndex]);
 
-  // touch (swipe up/down)
   useEffect(() => {
     const el = boxRef.current;
     if (!el) return;
@@ -75,16 +69,15 @@ export default function Home() {
       if (t) touchStartYRef.current = t.clientY;
     };
     const onTouchMove = (e) => {
-      // prevent the native scroll behavior on touch move
       e.preventDefault();
     };
     const onTouchEnd = (e) => {
       const t = (e.changedTouches && e.changedTouches[0]);
       if (!t || touchStartYRef.current == null) return;
       const dy = touchStartYRef.current - t.clientY;
-      const thresh = 30; // px threshold for swipe
-      if (dy > thresh) changeIndex(index + 1); // swipe up -> next
-      else if (dy < -thresh) changeIndex(index - 1); // swipe down -> prev
+      const thresh = 30;
+      if (dy > thresh) changeIndex(index + 1);
+      else if (dy < -thresh) changeIndex(index - 1);
       touchStartYRef.current = null;
     };
 
@@ -99,7 +92,6 @@ export default function Home() {
     };
   }, [index, changeIndex]);
 
-  // keyboard arrows for accessibility
   useEffect(() => {
     const onKey = (e) => {
       if (e.key === "ArrowDown" || e.key === "PageDown") changeIndex(index + 1);
@@ -127,62 +119,70 @@ export default function Home() {
           />
         </div>
       </div>
-      <div className="content">
-        <div className="title" >
-          <h1 style={{fontFamily: 'Akira', fontSize: '80px', marginBottom:'0px'}}>Catchy & Classy</h1>
-        </div>
-        <div
-          className="info-box"
-          ref={boxRef}
-          role="region"
-          aria-roledescription="carousel"
-          aria-label="Information sections"
-        >
-          <div className="sections">
-            {SECTIONS.map((s, i) => {
-              // decide class based on index
-              let posClass = "next"; // default: to the right
-              if (i === index) posClass = "active";
-              else if (i < index) posClass = "prev";
-              return (
-                <section
-                  key={s.title}
-                  className={`section ${posClass}`}
-                  aria-hidden={i === index ? "false" : "true"}
-                >
-                  <h1 style={{ fontFamily: "Dimod", fontSize: "60px" }}>{s.title}</h1>
-                  <p>{s.body}</p>
-                </section>
-              );
-            })}
-          </div>
 
-          {/* small UI hint (non-intrusive) */}
-          <div className="nav-dots" aria-hidden="true">
-            {SECTIONS.map((_, i) => (
-              <button
-                key={i}
-                className={`dot ${i === index ? "dot--active" : ""}`}
-                onClick={() => changeIndex(i)}
-                aria-label={`Go to ${i + 1}`}
-              />
-            ))}
-          </div>
-        </div>
-        <div className="logo-scroll">
-          <LogoLoop
-            logos={imageLogos}
-            speed={120}
-            direction="left"
-            logoHeight={48}
-            gap={50}
-            hoverSpeed={0}
-            scaleOnHover
-            ariaLabel="Technology partners"
-          />
+      <header className="device-header">
+        <div className="brand-title">Catchy &amp; Classy</div>
+      </header>
+
+      {/* Device-like centered viewport */}
+      <div className="device-wrap">
+        <div className="device">
+          <main
+            className="device-main"
+            role="main"
+            aria-label="Main viewport"
+          >
+            <div
+              className="info-box"
+              ref={boxRef}
+              role="region"
+              aria-roledescription="carousel"
+              aria-label="Information sections"
+            >
+              <div className="sections">
+                {SECTIONS.map((s, i) => {
+                  let posClass = "next";
+                  if (i === index) posClass = "active";
+                  else if (i < index) posClass = "prev";
+                  return (
+                    <section
+                      key={s.title}
+                      className={`section ${posClass}`}
+                      aria-hidden={i === index ? "false" : "true"}
+                    >
+                      <h2 className="section-title">{s.title}</h2>
+                      <p className="section-body">{s.body}</p>
+                    </section>
+                  );
+                })}
+              </div>
+
+              <div className="nav-dots" aria-hidden="true">
+                {SECTIONS.map((_, i) => (
+                  <button
+                    key={i}
+                    className={`dot ${i === index ? "dot--active" : ""}`}
+                    onClick={() => changeIndex(i)}
+                    aria-label={`Go to ${i + 1}`}
+                  />
+                ))}
+              </div>
+            </div>
+          </main>
         </div>
       </div>
-      
+      <div className="logo-scroll">
+        <LogoLoop
+          logos={imageLogos}
+          speed={120}
+          direction="left"
+          logoHeight={48}
+          gap={50}
+          hoverSpeed={0}
+          scaleOnHover
+          ariaLabel="Technology partners"
+        />
+      </div>
     </>
   );
 }

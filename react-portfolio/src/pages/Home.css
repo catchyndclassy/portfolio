@@ -1,12 +1,27 @@
-/* reset / ensure no accidental padding on root/body */
+/* reset */
 :root {
   --bg-fallback: transparent;
+
+  /* Target device size (change to preference). This is the "design" width.
+     It will scale down to fit smaller viewports. */
+  --device-width: 1280px;
+  --device-aspect-ratio: 16 / 9;
+  --device-padding: 48px;
+  --device-radius: 14px;
+  --accent: rgba(240,109,48,0.9);
 }
 
+/* page-level */
 html, body {
   height: 100%;
   margin: 0;
   padding: 0;
+  background: var(--bg-fallback);
+  font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+  overflow-y: auto;
 }
 
 /* ---------- Background layer - fixed & visible ---------- */
@@ -20,7 +35,6 @@ html, body {
   overflow: hidden;
   contain: paint;
 }
-
 .bg-span__inner,
 .bg-span__inner > * {
   width: 100%;
@@ -29,119 +43,167 @@ html, body {
   display: block;
 }
 
-/* Content: constrained width and centered by the parent flexbox */
-.content {
+/* Center and scale the device viewport */
+.device-wrap {
   position: relative;
   z-index: 10;
   min-height: 100vh;
-  width: min(1200px, 80%);
-  box-sizing: border-box;
-  padding: 6rem 2rem;
-  margin: 0 auto;
-  background: transparent;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-start;
-}
-
-/* Info box (container) */
-.info-box {
-  background-color: rgba(255, 255, 255, 0.048);
-  border: solid 0.1px rgba(240, 109, 48, 0.534);
-  border-radius: 30px;
-  padding-left: 60px;
-  padding-top: 40px;
-  margin-top: 0px;
-  position: relative;
-  margin-top: 120px;
-  width: 100%;
-  max-width: 1100px; /* reasonable max, adapt as needed */
-  height: 640px;
-  overflow: hidden; /* important: hide scrollbars and native scroll */
-  box-sizing: border-box;
-}
-
-.logo-scroll {
-  position: relative;
-  width: 100%;                /* fill the content width */
-  max-width: 1100px;          /* match info-box max */
-  margin-top: 50px;
-  height: 80px;               /* or use auto if you prefer variable height */
-  background: transparent;    /* remove solid white background */
   display: flex;
   align-items: center;
   justify-content: center;
-  overflow: hidden;           /* ensure track doesn't overflow parent */
+  padding: 24px;
   box-sizing: border-box;
-  z-index: 10;                /* keep above the background */
-  padding: 8px 12px;          /* optional breathing room */
 }
 
-/* sections wrapper is full size (position:relative) */
+/* Device: allow it to size to content and let the page scroll when needed */
+.device {
+  width: var(--device-width);
+  /* remove fixed aspect-ratio so device height follows content */
+  /* aspect-ratio: var(--device-aspect-ratio); */
+  max-width: calc(100vw - 48px);
+  /* remove max-height so the device can grow beyond the viewport if necessary */
+  /* max-height: calc(100vh - 48px); */
+  border-radius: var(--device-radius);
+  padding: calc(var(--device-padding) + 100px) var(--device-padding) var(--device-padding);
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  /* allow content to be visible and let the page scroll instead of clipping */
+  overflow: visible;
+  /* allow the device to grow vertically */
+  height: auto;
+}
+
+/* header area (brand/title) */
+/* ===== new/updated header positioning ===== */
+.device-header {
+  position: absolute;     /* position relative to the page (body) */
+  top: 100px;             /* exactly 100px below the top of the body */
+  left: 50%;
+  transform: translateX(-50%);
+  width: var(--device-width);
+  max-width: calc(100vw - 48px); /* match device max-width behavior */
+  box-sizing: border-box;
+  height: 76px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 15;            /* above device content and background */
+  pointer-events: auto;
+  margin: 0;              /* remove any previous margin */
+}
+
+/* Brand title (removed inline styles) */
+.brand-title {
+  font-family: "Akira", Inter, system-ui, sans-serif;
+  font-size: clamp(28px, 4.5vw, 64px);
+  color: #ffffff;
+  text-shadow: 0 2px 12px rgba(0,0,0,0.6);
+  margin: 0;
+  letter-spacing: -0.01em;
+  line-height: 1;
+}
+
+/* main content area flows with content (keep this from prior suggestion) */
+.device-main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  width: 100%;
+  height: auto;
+  box-sizing: border-box;
+}
+
+/* Info box: sized inside device and scroll-locked */
+/* info-box: size to its active section's content (from earlier suggestion) */
+.info-box {
+  background-color: rgba(255, 255, 255, 0.048);
+  border: solid 0.1px rgba(240, 109, 48, 0.534);
+  border-radius: 20px;
+  padding: 32px 48px;
+  margin: 0;
+  position: relative;
+  width: 70%;
+  flex: 0 0 auto;
+  height: auto;
+  box-sizing: border-box;
+}
+
+/* logo-scroll: placed below info-box, fixed height */
+.logo-scroll {
+  position: absolute;
+  bottom: 20px; /* 👈 adjust this number as needed */
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: calc(100vw - 48px);
+  height: 72px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  box-sizing: border-box;
+  padding: 6px 12px;
+  background: transparent;
+  z-index: 15;
+}
+
+/* sections wrapper fills info-box */
 .sections {
   position: relative;
   width: 100%;
   height: 100%;
 }
 
-/* Each section is absolutely stacked and centered vertically within info-box */
+/* each section stacked absolutely inside info-box */
+/* sections in normal flow; only the .active one is displayed */
 .section {
-  position: absolute;
-  inset: 0; /* top:0; right:0; bottom:0; left:0 */
-  display: flex;
+  position: relative; /* normal flow */
+  display: none;      /* hide inactive ones so they don't affect layout */
   flex-direction: column;
   justify-content: flex-start;
   align-items: flex-start;
-  padding: 40px 60px;
+  padding: 20px 36px;
   box-sizing: border-box;
-  transform: translateX(100%); /* default: offscreen right */
   opacity: 0;
   pointer-events: none;
-  will-change: transform, opacity;
-  transition: transform 600ms cubic-bezier(.2,.9,.3,1), opacity 300ms ease;
+  transition: opacity 300ms ease;
 }
 
-/* active section centered */
 .section.active {
-  transform: translateX(0%);
+  display: block;    /* only the active section occupies vertical space */
   opacity: 1;
   pointer-events: auto;
 }
-
-/* previous sections move left (outside view) */
 .section.prev {
   transform: translateX(-100%);
-  opacity: 0.0;
+  opacity: 0;
 }
-
-/* next stays right (entrance position) */
 .section.next {
   transform: translateX(100%);
-  opacity: 0.0;
+  opacity: 0;
 }
 
-/* Tweak heading & paragraph appearance */
-.section h1 {
-  margin: 0 0 18px 0;
+/* section heading & body — removed inline styles in JSX */
+.section-title {
+  font-family: "Dimod", Inter, system-ui, sans-serif;
+  font-size: clamp(22px, 3.5vw, 35px);
+  margin: 0 0 12px 0;
   color: #fff;
   text-shadow: 0 2px 12px rgba(0,0,0,0.6);
+  padding-top: 0px;
 }
-
-.section p {
+.section-body {
   margin: 0;
-  color: rgba(255,255,255,0.85);
-  max-width: 60%;
+  color: rgba(255,255,255,0.9);
+  max-width: 66%;
   line-height: 1.5;
-  font-size: 14px;
+  font-size: 15px;
 }
 
-/* subtle decorative focus ring for keyboard nav */
-.section:focus {
-  outline: none;
-}
-
-/* Navigation dots in bottom-right corner (non-intrusive) */
+/* nav dots */
 .nav-dots {
   position: absolute;
   right: 18px;
@@ -149,7 +211,6 @@ html, body {
   display: flex;
   gap: 8px;
 }
-
 .dot {
   width: 10px;
   height: 10px;
@@ -160,36 +221,41 @@ html, body {
   cursor: pointer;
   transition: transform 220ms ease, background 220ms ease;
 }
-
 .dot--active {
   transform: scale(1.2);
-  background: rgba(240,109,48,0.9);
-  border-color: rgba(240,109,48,0.9);
+  background: var(--accent);
+  border-color: var(--accent);
 }
 
-/* responsiveness */
-@media (max-width: 900px) {
-  .info-box {
-    top: 120px;
-    height: 540px;
-    padding-left: 36px;
-    padding-top: 28px;
-  }
-  .section p {
-    max-width: 80%;
-    font-size: 13px;
-  }
-  .section h1 { font-size: 48px; }
+/* accessibility focus */
+.section:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(240,109,48,0.12);
 }
 
-@media (max-width: 520px) {
-  .info-box {
-    width: calc(100% - 32px);
-    padding-left: 20px;
-    padding-top: 20px;
-    border-radius: 18px;
-    height: 520px;
-  }
-  .section h1 { font-size: 40px; }
-  .section p { font-size: 14px; max-width: 100%; }
+/* responsiveness: scale typography and box spacing on narrow screens */
+@media (max-width: 1100px) {
+  :root { --device-width: 980px; }
+  .info-box { padding-left: 32px; padding-right: 32px; padding-top: 24px; }
+  .section-body { max-width: 80%; font-size: 14px; }
+}
+
+@media (max-width: 700px) {
+  :root { --device-width: 720px; }
+  .device { padding: 20px; }
+  .brand-title { font-size: clamp(22px, 6vw, 42px); }
+  .section-title { font-size: clamp(18px, 5.5vw, 36px); }
+  .info-box { border-radius: 12px; }
+  .logo-scroll { height: 60px; }
+  .section-body { max-width: 100%; font-size: 13px; }
+}
+
+/* very small phones: ensure everything still fits and scales down */
+@media (max-width: 420px) {
+  :root { --device-width: 360px; }
+  .device { padding: 12px; }
+  .device-header { height: 56px; }
+  .brand-title { font-size: 20px; }
+  .section-title { font-size: 18px; }
+  .logo-scroll { height: 48px; }
 }
