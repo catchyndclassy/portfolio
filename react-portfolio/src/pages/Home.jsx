@@ -18,20 +18,6 @@ const socialItems = [
 export default function Home() {
   return (
     <>
-      {/* Sticky root — drop this near the top of your app so it stays pinned */}
-      <div className="cc-sticky-menu-root" aria-hidden="false">
-        <StaggeredMenu
-          isFixed={true}
-          position="right"
-          items={menuItems}
-          socialItems={socialItems}
-          displaySocials={true}
-          displayItemNumbering={true}
-          // logoUrl is already defaulted to /src/assets/CatchyndClassy_LOGO.jpg,
-          // but you can override it here if needed
-          // logoUrl="/src/assets/CatchyndClassy_LOGO.jpg"
-        />
-      </div>
       <div className="bg-span">
         <ColorBlend
           colors={["#d12c16ff"]}
@@ -44,6 +30,17 @@ export default function Home() {
           parallax={0.5}
           noise={0.1}
           transparent={false}
+        />
+        <StaggeredMenu
+          isFixed={true}
+          position="right"
+          items={menuItems}
+          socialItems={socialItems}
+          displaySocials={true}
+          displayItemNumbering={true}
+          // logoUrl is already defaulted to /src/assets/CatchyndClassy_LOGO.jpg,
+          // but you can override it here if needed
+          // logoUrl="/src/assets/CatchyndClassy_LOGO.jpg"
         />
       </div>
     </>
