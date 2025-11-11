@@ -16,20 +16,23 @@
 }
 
 .staggered-menu-header {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 1rem;        /* reduced from 2em to avoid overflow on narrow screens */
-  width: 100%;
+  padding: 2em;
   background: transparent;
-  pointer-events: none; /* children still handle events */
+  pointer-events: none;
   z-index: 20;
 }
 
-/* allow header children to receive pointer events */
 .staggered-menu-header > * {
   pointer-events: auto;
 }
+
 .sm-logo {
   display: flex;
   align-items: center;
