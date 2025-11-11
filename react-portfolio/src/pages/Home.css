@@ -1,16 +1,53 @@
-/* full-page background that visually fills scroll area */
+:root {
+  --bg-fallback: transparent; /* let the ColorBlend show through */
+}
+
+/* Ensure page doesn't paint an opaque background over the fixed bg */
+html, body, #root {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  background: var(--bg-fallback);
+}
+
+/* ---------- Background layer - fixed & visible ---------- */
+/* Use z-index:0 (not negative) so it's not painted underneath page root */
 .bg-span {
   position: fixed;
   inset: 0;
   width: 100%;
   height: 100%;
-  min-height: 100vh;
-  z-index: -1;
+  z-index: 0;              /* <-- important: non-negative */
   pointer-events: none;
+  overflow: hidden;
+  contain: paint;
 }
-.bg-span > * {
+
+/* Force the inner to exactly match the viewport to avoid canvas clipping */
+.bg-span__inner,
+.bg-span__inner > * {
   width: 100%;
-  height: 100%;
+  height: 100svh;          /* Use svh/ vh to be safe on mobile */
+  min-height: 100vh;
   display: block;
 }
 
+/* ---------- Content layer (scrolls over the background) ---------- */
+.content {
+  position: relative; /* regular flow so it scrolls */
+  z-index: 10;        /* above bg (0) */
+  color: #fff;
+  font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  line-height: 1.5;
+  padding: 6rem 2rem;
+  box-sizing: border-box;
+  background: transparent;
+  min-height: 100vh;
+}
+
+.transparent-box{
+  position: relative;
+  top: 200px;
+  background-color: white;
+  color: black;
+}
