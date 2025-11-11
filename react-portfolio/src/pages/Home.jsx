@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect, useCallback } from "react";
 import ColorBlend from "../components/backgrounds/ColorBlends";
+import LogoLoop from "../components/logoScroll/LogoLoop";
 import "./Home.css";
 
 const SECTIONS = [
@@ -19,6 +20,12 @@ const SECTIONS = [
     title: "Contact",
     body: "Say hi — we typically reply quickly and enjoy collaborative projects."
   }
+];
+
+const imageLogos = [
+  { src: "../src/assets/logos/githubLogo.png", alt: "GitHub", href: "https://github.com/catchyndclassy" },
+  { src: "../src/assets/logos/igLogo.png", alt: "Instagram", href: "https://www.instagram.com/catchyndclassy?igsh=cGJoaTFwOGI4MDRl&utm_source=qr " },
+  { src: "../src/assets/logos/linkedinLogo.png", alt: "LinkedIn", href: "https://company3.com" },
 ];
 
 export default function Home() {
@@ -120,8 +127,10 @@ export default function Home() {
           />
         </div>
       </div>
-
       <div className="content">
+        <div className="title" >
+          <h1 style={{fontFamily: 'Akira', fontSize: '80px', marginBottom:'0px'}}>Catchy & Classy</h1>
+        </div>
         <div
           className="info-box"
           ref={boxRef}
@@ -141,7 +150,7 @@ export default function Home() {
                   className={`section ${posClass}`}
                   aria-hidden={i === index ? "false" : "true"}
                 >
-                  <h1 style={{ fontFamily: "Ananda", fontSize: "60px" }}>{s.title}</h1>
+                  <h1 style={{ fontFamily: "Dimod", fontSize: "60px" }}>{s.title}</h1>
                   <p>{s.body}</p>
                 </section>
               );
@@ -160,7 +169,20 @@ export default function Home() {
             ))}
           </div>
         </div>
+        <div className="logo-scroll">
+          <LogoLoop
+            logos={imageLogos}
+            speed={120}
+            direction="left"
+            logoHeight={48}
+            gap={50}
+            hoverSpeed={0}
+            scaleOnHover
+            ariaLabel="Technology partners"
+          />
+        </div>
       </div>
+      
     </>
   );
 }
