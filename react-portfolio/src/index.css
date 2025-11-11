@@ -17,8 +17,8 @@ body {
 }
 
 @font-face {
-  font-family: Ananda;
-  src: url(../src/assets/fonts/Ananda.ttf) format("truetype");
+  font-family: Penmanship;
+  src: url(../src/assets/fonts/KGPerfectPenmanship.otf) format("opentype");
 }
 
 @font-face {

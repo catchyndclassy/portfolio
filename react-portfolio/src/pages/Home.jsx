@@ -6,7 +6,7 @@ import "./Home.css";
 const SECTIONS = [
   {
     title: "About",
-    body: "We are Catchy and Classy, the banner says it all."
+    body: "Welcome to Catchy & Classy, a fresh perspective to the world of digital experiences.From full-stack development and Figma design to blog writing that resonates, every detail gets our signature balance of catchy creativity and classy precision. <br /> Our philosophy is simple: aesthetics and efficiency go hand in hand. We design with intent, code with purpose, and write with personality.<br />Catchy meets Classy — in everything we create."
   },
   {
     title: "Services",
@@ -120,11 +120,12 @@ export default function Home() {
         </div>
       </div>
 
-      <header className="device-header">
+      {/* header in normal flow; margin-top implements the 100px offset from top of body */}
+      <header className="device-header" aria-hidden="false">
         <div className="brand-title">Catchy &amp; Classy</div>
       </header>
 
-      {/* Device-like centered viewport */}
+      {/* Device-like centered viewport (normal flow, no absolute positioning) */}
       <div className="device-wrap">
         <div className="device">
           <main
@@ -151,7 +152,10 @@ export default function Home() {
                       aria-hidden={i === index ? "false" : "true"}
                     >
                       <h2 className="section-title">{s.title}</h2>
-                      <p className="section-body">{s.body}</p>
+                      <p
+                        className="section-body"
+                        dangerouslySetInnerHTML={{ __html: s.body }}
+                      />
                     </section>
                   );
                 })}
@@ -171,7 +175,9 @@ export default function Home() {
           </main>
         </div>
       </div>
-      <div className="logo-scroll">
+
+      {/* logo-scroll as last in flow; margin-bottom ensures it is 20px above the document end */}
+      <div className="logo-scroll" aria-hidden="false">
         <LogoLoop
           logos={imageLogos}
           speed={120}

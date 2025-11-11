@@ -1,19 +1,30 @@
-/* reset */
+/* Home.css - stacked flow version
+   - device-header (100px from top of body via margin)
+   - device (centered and responsive)
+   - logo-scroll (last element with 20px spacing from document bottom)
+*/
+
+/* reset & variables */
 :root {
   --bg-fallback: transparent;
 
-  /* Target device size (change to preference). This is the "design" width.
-     It will scale down to fit smaller viewports. */
+  /* design / device sizing */
   --device-width: 1280px;
-  --device-aspect-ratio: 16 / 9;
   --device-padding: 48px;
   --device-radius: 14px;
   --accent: rgba(240,109,48,0.9);
+
+  /* spacing targets requested */
+  --header-offset: 100px;   /* header distance from top of body */
+  --header-height: 76px;    /* header element height (for design/visual use) */
+  --logo-gap-bottom: 20px;  /* logo distance above bottom of document */
+  --logo-height: 72px;      /* logo bar height */
 }
 
-/* page-level */
+/* page-level: allow whole-page vertical scrolling */
 html, body {
   height: 100%;
+  min-height: 100vh;        /* ensure document >= viewport height */
   margin: 0;
   padding: 0;
   background: var(--bg-fallback);
@@ -21,10 +32,11 @@ html, body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   overflow-x: hidden;
-  overflow-y: auto;
+  overflow-y: auto; /* page scroll as a single unit */
+  box-sizing: border-box;
 }
 
-/* ---------- Background layer - fixed & visible ---------- */
+/* background layer */
 .bg-span {
   position: fixed;
   inset: 0;
@@ -43,69 +55,62 @@ html, body {
   display: block;
 }
 
-/* Center and scale the device viewport */
-.device-wrap {
-  position: relative;
-  z-index: 10;
-  min-height: 100vh;
+/* Header in normal flow but positioned so z-index works */
+.device-header {
+  position: relative;            /* <-- important so z-index takes effect */
+  z-index: 999;                  /* sit well above device & logo */
+  margin: var(--header-offset) auto 0; /* keeps the exact 100px top offset */
+  width: var(--device-width);
+  max-width: calc(100vw - 48px);
+  height: var(--header-height);
   display: flex;
   align-items: center;
   justify-content: center;
+  box-sizing: border-box;
+  pointer-events: auto;
+  /* avoid accidental clipping from parent */
+  overflow: visible;
+}
+
+/* Brand title — ensure it displays and isn't clipped */
+.brand-title {
+  display: block;
+  font-family: "Akira", Inter, system-ui, sans-serif;
+  font-size: clamp(28px, 4.5vw, 64px);
+  color: #ffffff; /* explicit color for visibility */
+  text-shadow: 0 2px 12px rgba(0,0,0,0.6);
+  margin: 0;
+  line-height: 1;
+  white-space: nowrap;      /* keep the logo/title on one line (remove if you want wrapping) */
+  overflow: visible;        /* ensure text isn't clipped */
+  transform: translateZ(0); /* helps some browsers composite text crisply above backgrounds */
+}
+/* Center and scale the device viewport (in normal flow) */
+.device-wrap {
+  position: relative;
+  z-index: 10;
+  /* remove vertical centering so the device sits directly after the header in document flow */
+  display: block;            /* use normal document flow */
   padding: 24px;
   box-sizing: border-box;
 }
 
-/* Device: allow it to size to content and let the page scroll when needed */
+/* Device: sizing and layout */
 .device {
   width: var(--device-width);
-  /* remove fixed aspect-ratio so device height follows content */
-  /* aspect-ratio: var(--device-aspect-ratio); */
   max-width: calc(100vw - 48px);
-  /* remove max-height so the device can grow beyond the viewport if necessary */
-  /* max-height: calc(100vh - 48px); */
   border-radius: var(--device-radius);
-  padding: calc(var(--device-padding) + 100px) var(--device-padding) var(--device-padding);
+  padding: var(--device-padding);
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
   gap: 20px;
-  /* allow content to be visible and let the page scroll instead of clipping */
   overflow: visible;
-  /* allow the device to grow vertically */
   height: auto;
+  margin: 0 auto;            /* center horizontally */
 }
 
-/* header area (brand/title) */
-/* ===== new/updated header positioning ===== */
-.device-header {
-  position: absolute;     /* position relative to the page (body) */
-  top: 100px;             /* exactly 100px below the top of the body */
-  left: 50%;
-  transform: translateX(-50%);
-  width: var(--device-width);
-  max-width: calc(100vw - 48px); /* match device max-width behavior */
-  box-sizing: border-box;
-  height: 76px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 15;            /* above device content and background */
-  pointer-events: auto;
-  margin: 0;              /* remove any previous margin */
-}
-
-/* Brand title (removed inline styles) */
-.brand-title {
-  font-family: "Akira", Inter, system-ui, sans-serif;
-  font-size: clamp(28px, 4.5vw, 64px);
-  color: #ffffff;
-  text-shadow: 0 2px 12px rgba(0,0,0,0.6);
-  margin: 0;
-  letter-spacing: -0.01em;
-  line-height: 1;
-}
-
-/* main content area flows with content (keep this from prior suggestion) */
+/* main content area flows with content */
 .device-main {
   display: flex;
   flex-direction: column;
@@ -116,8 +121,7 @@ html, body {
   box-sizing: border-box;
 }
 
-/* Info box: sized inside device and scroll-locked */
-/* info-box: size to its active section's content (from earlier suggestion) */
+/* Info box */
 .info-box {
   background-color: rgba(255, 255, 255, 0.048);
   border: solid 0.1px rgba(240, 109, 48, 0.534);
@@ -131,15 +135,15 @@ html, body {
   box-sizing: border-box;
 }
 
-/* logo-scroll: placed below info-box, fixed height */
+/* Logo scroll : last in document flow; margin-bottom ensures it's 20px above document bottom */
 .logo-scroll {
-  position: absolute;
-  bottom: 20px; /* 👈 adjust this number as needed */
-  left: 50%;
-  transform: translateX(-50%);
+  position: relative;                /* or static — keeps it in document flow */
+  margin: 40px auto 20px;           /* spacing above/below; bottom 20px from document end */
+  left: 0;
+  transform: none;
   width: 100%;
   max-width: calc(100vw - 48px);
-  height: 72px;
+  height: var(--logo-height);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -147,7 +151,8 @@ html, body {
   box-sizing: border-box;
   padding: 6px 12px;
   background: transparent;
-  z-index: 15;
+  z-index: 10;
+  pointer-events: auto;
 }
 
 /* sections wrapper fills info-box */
@@ -157,11 +162,10 @@ html, body {
   height: 100%;
 }
 
-/* each section stacked absolutely inside info-box */
-/* sections in normal flow; only the .active one is displayed */
+/* section styles */
 .section {
-  position: relative; /* normal flow */
-  display: none;      /* hide inactive ones so they don't affect layout */
+  position: relative;
+  display: none;
   flex-direction: column;
   justify-content: flex-start;
   align-items: flex-start;
@@ -173,7 +177,7 @@ html, body {
 }
 
 .section.active {
-  display: block;    /* only the active section occupies vertical space */
+  display: block;
   opacity: 1;
   pointer-events: auto;
 }
@@ -186,7 +190,7 @@ html, body {
   opacity: 0;
 }
 
-/* section heading & body — removed inline styles in JSX */
+/* headings & body */
 .section-title {
   font-family: "Dimod", Inter, system-ui, sans-serif;
   font-size: clamp(22px, 3.5vw, 35px);
@@ -200,6 +204,7 @@ html, body {
   color: rgba(255,255,255,0.9);
   max-width: 66%;
   line-height: 1.5;
+  font-family: Penmanship;
   font-size: 15px;
 }
 
@@ -227,13 +232,13 @@ html, body {
   border-color: var(--accent);
 }
 
-/* accessibility focus */
+/* focus */
 .section:focus {
   outline: none;
   box-shadow: 0 0 0 3px rgba(240,109,48,0.12);
 }
 
-/* responsiveness: scale typography and box spacing on narrow screens */
+/* responsive adjustments */
 @media (max-width: 1100px) {
   :root { --device-width: 980px; }
   .info-box { padding-left: 32px; padding-right: 32px; padding-top: 24px; }
@@ -241,21 +246,25 @@ html, body {
 }
 
 @media (max-width: 700px) {
-  :root { --device-width: 720px; }
+  :root {
+    --device-width: 720px;
+    --logo-height: 60px;
+  }
   .device { padding: 20px; }
   .brand-title { font-size: clamp(22px, 6vw, 42px); }
   .section-title { font-size: clamp(18px, 5.5vw, 36px); }
   .info-box { border-radius: 12px; }
-  .logo-scroll { height: 60px; }
+  .logo-scroll { height: var(--logo-height); }
   .section-body { max-width: 100%; font-size: 13px; }
 }
 
-/* very small phones: ensure everything still fits and scales down */
 @media (max-width: 420px) {
-  :root { --device-width: 360px; }
+  :root {
+    --device-width: 360px;
+    --logo-height: 48px;
+  }
   .device { padding: 12px; }
-  .device-header { height: 56px; }
   .brand-title { font-size: 20px; }
   .section-title { font-size: 18px; }
-  .logo-scroll { height: 48px; }
+  .logo-scroll { height: var(--logo-height); }
 }
