@@ -20,3 +20,13 @@ body {
   font-family: Ananda;
   src: url(../src/assets/fonts/Ananda.ttf) format("truetype");
 }
+
+@font-face {
+  font-family: Dimod;
+  src: url(../src/assets/fonts/DIMOD.otf) format("opentype");
+}
+
+@font-face {
+  font-family: Akira;
+  src: url(../src/assets/fonts/Akira.otf) format(opentype);
+}

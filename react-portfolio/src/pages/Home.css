@@ -40,7 +40,9 @@ html, body {
   margin: 0 auto;
   background: transparent;
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
 }
 
 /* Info box (container) */
@@ -50,13 +52,30 @@ html, body {
   border-radius: 30px;
   padding-left: 60px;
   padding-top: 40px;
+  margin-top: 0px;
   position: relative;
-  top: 200px;
+  margin-top: 120px;
   width: 100%;
   max-width: 1100px; /* reasonable max, adapt as needed */
   height: 640px;
   overflow: hidden; /* important: hide scrollbars and native scroll */
   box-sizing: border-box;
+}
+
+.logo-scroll {
+  position: relative;
+  width: 100%;                /* fill the content width */
+  max-width: 1100px;          /* match info-box max */
+  margin-top: 50px;
+  height: 80px;               /* or use auto if you prefer variable height */
+  background: transparent;    /* remove solid white background */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;           /* ensure track doesn't overflow parent */
+  box-sizing: border-box;
+  z-index: 10;                /* keep above the background */
+  padding: 8px 12px;          /* optional breathing room */
 }
 
 /* sections wrapper is full size (position:relative) */

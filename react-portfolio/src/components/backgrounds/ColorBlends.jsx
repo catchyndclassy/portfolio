@@ -272,22 +272,50 @@ export default function ColorBends({
   ]);
 
   useEffect(() => {
-    const material = materialRef.current;
-    const container = containerRef.current;
-    if (!material || !container) return;
+  const material = materialRef.current;
+  const container = containerRef.current;
+  if (!material || !container) return;
 
-    const handlePointerMove = e => {
-      const rect = container.getBoundingClientRect();
-      const x = ((e.clientX - rect.left) / (rect.width || 1)) * 2 - 1;
-      const y = -(((e.clientY - rect.top) / (rect.height || 1)) * 2 - 1);
-      pointerTargetRef.current.set(x, y);
-    };
+  const getPointerFromEvent = (e) => {
+    const rect = container.getBoundingClientRect();
+    // support pointer / mouse / touch
+    const clientX = e.clientX ?? (e.touches && e.touches[0] && e.touches[0].clientX);
+    const clientY = e.clientY ?? (e.touches && e.touches[0] && e.touches[0].clientY);
+    if (clientX == null || clientY == null) return null;
+    const x = ((clientX - rect.left) / (rect.width || 1)) * 2 - 1;
+    const y = -(((clientY - rect.top) / (rect.height || 1)) * 2 - 1);
+    return { x, y };
+  };
 
-    container.addEventListener('pointermove', handlePointerMove);
-    return () => {
-      container.removeEventListener('pointermove', handlePointerMove);
-    };
-  }, []);
+  const handlePointer = (e) => {
+    const p = getPointerFromEvent(e);
+    if (p) pointerTargetRef.current.set(p.x, p.y);
+  };
 
-  return <div ref={containerRef} className={`color-bends-container ${className}`} style={style} />;
+  const handleLeave = () => {
+    // gently return to center when pointer leaves window
+    pointerTargetRef.current.set(0, 0);
+  };
+
+  // listen globally so background receives pointer info even when it's under other content
+  window.addEventListener('pointermove', handlePointer, { passive: true });
+  window.addEventListener('touchmove', handlePointer, { passive: true });
+  window.addEventListener('mouseleave', handleLeave);
+  window.addEventListener('blur', handleLeave);
+
+  return () => {
+    window.removeEventListener('pointermove', handlePointer);
+    window.removeEventListener('touchmove', handlePointer);
+    window.removeEventListener('mouseleave', handleLeave);
+    window.removeEventListener('blur', handleLeave);
+  };
+}, []);
+
+  return (
+    <div
+      ref={containerRef}
+      className={className}
+      style={style}
+    />
+  );
 }
