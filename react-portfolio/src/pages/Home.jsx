@@ -103,6 +103,7 @@ export default function Home() {
 
   return (
     <>
+    <div className="home-container">
       <div className="bg-span" aria-hidden="true">
         <div className="bg-span__inner">
           <ColorBlend
@@ -189,6 +190,7 @@ export default function Home() {
           ariaLabel="Technology partners"
         />
       </div>
+    </div>
     </>
   );
 }

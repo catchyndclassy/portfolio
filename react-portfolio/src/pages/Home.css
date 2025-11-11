@@ -36,6 +36,12 @@ html, body {
   box-sizing: border-box;
 }
 
+.home-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh; /* Make this container fill the viewport height */
+}
+
 /* background layer */
 .bg-span {
   position: fixed;
@@ -93,6 +99,7 @@ html, body {
   display: block;            /* use normal document flow */
   padding: 24px;
   box-sizing: border-box;
+  flex: 1 0 auto;
 }
 
 /* Device: sizing and layout */
