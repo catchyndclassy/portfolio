@@ -21,12 +21,12 @@ export default function Home() {
           />
         </div>
       </div>
-
-      <main className="content">
-        <div className="transparent-box">
-          <h1>Welcome to My Portfolio</h1>
+      <div className="content">
+        <div className="info-box">
+          <h1 style={{fontFamily: "Ananda", fontSize: '60px'}}>About</h1>
+          <p>We are Catchy and Classy, the banner says it all.</p>
         </div>
-      </main>
+      </div>
     </>
   );
 }

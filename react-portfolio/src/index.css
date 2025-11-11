@@ -15,3 +15,8 @@ body {
   -moz-osx-font-smoothing: grayscale;
   overflow-y: auto; /* normal scrolling for page content */
 }
+
+@font-face {
+  font-family: Ananda;
+  src: url(../src/assets/fonts/Ananda.ttf) format("truetype");
+}
