@@ -1,0 +1,46 @@
+.bg-span {
+  position: fixed;   /* removes it from normal flow so parents can't limit it */
+  inset: 0;          /* top:0; right:0; bottom:0; left:0; */
+  width: 100vw;
+  height: 100vh;
+  z-index: -1;       /* put it behind the page content */
+  pointer-events: none; /* don't block clicks on UI */
+}
+
+.bg-span > * {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* Sticky root that ensures menu stays on top and doesn't escape viewport */
+.cc-sticky-menu-root {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  /* absurdly high z-index to beat nearly everything — safe since it's just UI chrome */
+  z-index: 2147483647; /* max 32-bit signed int; intentionally overkill */
+  max-height: 100vh; /* never taller than viewport */
+  pointer-events: none; /* allow only children to receive events */
+  overflow: hidden; /* root never overflows the viewport */
+}
+
+/* Allow inner interactive elements (the menu) to receive pointer events */
+.cc-sticky-menu-root > * {
+  pointer-events: auto;
+}
+
+/* Small safety: force the menu panel to be constrained to viewport height */
+.cc-sticky-menu-root .staggered-menu-wrapper,
+.cc-sticky-menu-root .staggered-menu-wrapper.fixed-wrapper {
+  max-height: 100vh;
+  overflow: visible;
+}
+
+/* Ensure the internal panel (menu) scrolls if its content is tall */
+.cc-sticky-menu-root .staggered-menu-panel {
+  max-height: 100vh;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}

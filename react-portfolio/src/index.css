@@ -1,0 +1,16 @@
+html, body, #root {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+  /* Don't use display:flex/place-items on body — do that inside app shell if you need centering */
+  background-color: var(--app-bg, #242424);
+  color: var(--app-foreground, rgba(255,255,255,.87));
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-y: auto; /* normal scrolling for page content */
+}
