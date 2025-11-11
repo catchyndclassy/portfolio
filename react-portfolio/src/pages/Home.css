@@ -133,15 +133,13 @@ html, body {
   background-color: rgba(255, 255, 255, 0.048);
   border: solid 0.1px rgba(240, 109, 48, 0.534);
   border-radius: 20px;
-  padding: 32px 48px;
-  margin: 0;
+  padding: 32px;               /* use symmetric padding, child can use its own spacing */
+  margin: 0 auto;
   position: relative;
   width: 70%;
-  flex: 0 0 auto;
-  height: auto;
+  max-width: 1100px;           /* <--- constrain how wide the card can grow */
   box-sizing: border-box;
 }
-
 /* Logo scroll : last in document flow; margin-bottom ensures it's 20px above document bottom */
 .logo-scroll {
   position: relative;                /* or static — keeps it in document flow */
@@ -209,10 +207,17 @@ html, body {
 .section-body {
   margin: 0;
   color: rgba(255,255,255,0.9);
-  max-width: 66%;
+  width: 100%;                 /* fill the card interior */
+  max-width: 100%;             /* ensure children can use full inner width */
   line-height: 1.5;
   font-family: Penmanship;
   font-size: 15px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;         /* center Blocks inside the section */
+  gap: 18px;
+  padding: 0;                  /* keep horizontal spacing in the card's padding, not here */
 }
 
 /* nav dots */

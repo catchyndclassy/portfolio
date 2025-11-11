@@ -1,16 +1,31 @@
 import React, { useState, useRef, useEffect, useCallback } from "react";
 import ColorBlend from "../components/backgrounds/ColorBlends";
+import Blocks from "../components/blocks/Blocks";
 import LogoLoop from "../components/logoScroll/LogoLoop";
 import "./Home.css";
 
 const SECTIONS = [
   {
     title: "About",
-    body: "Welcome to Catchy & Classy, a fresh perspective to the world of digital experiences.From full-stack development and Figma design to blog writing that resonates, every detail gets our signature balance of catchy creativity and classy precision. <br /> Our philosophy is simple: aesthetics and efficiency go hand in hand. We design with intent, code with purpose, and write with personality.<br />Catchy meets Classy — in everything we create."
+    body: (
+      <>
+        Welcome to Catchy & Classy, a fresh perspective to the world of digital experiences.From full-stack development and Figma design to blog writing that resonates, every detail gets our signature balance of catchy creativity and classy precision. <br /> Our philosophy is simple: aesthetics and efficiency go hand in hand. We design with intent, code with purpose, and write with personality.<br />Catchy meets Classy — in everything we create.
+      </>
+    )
   },
   {
     title: "Services",
-    body: "We craft delightful user experiences, animations and accessible UI."
+    body: (
+      <>
+        <Blocks
+          items={[
+            {label: "Web Development", to:'/web-dev'},
+            {label: "Figma Design", to:'/figma-design'},
+            {label: "Blog Writing", to:'/blog-writing'}
+          ]}
+        />
+      </>
+    )
   },
   {
     title: "Work",
@@ -153,10 +168,9 @@ export default function Home() {
                       aria-hidden={i === index ? "false" : "true"}
                     >
                       <h2 className="section-title">{s.title}</h2>
-                      <p
-                        className="section-body"
-                        dangerouslySetInnerHTML={{ __html: s.body }}
-                      />
+                      <div className="section-body">
+                        {s.body}
+                      </div>
                     </section>
                   );
                 })}
