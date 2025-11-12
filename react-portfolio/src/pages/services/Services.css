@@ -1,0 +1,113 @@
+:root{
+  --device-width: 1280px;
+  --device-padding: 48px;
+  --device-radius: 14px;
+  --accent: rgba(240,109,48,0.9);
+}
+
+/* background layer */
+.bg-span {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+  contain: paint;
+}
+.bg-span__inner,
+.bg-span__inner > * {
+  width: 100%;
+  height: 100svh;
+  min-height: 100vh;
+  display: block;
+}
+
+.device-wrap {
+  position: relative;
+  z-index: 10;
+  /* remove vertical centering so the device sits directly after the header in document flow */
+  display: block;            /* use normal document flow */
+  padding: 24px;
+  box-sizing: border-box;
+  flex: 1 0 auto;
+}
+
+.device-header {
+  position: relative;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  gap: 16px;
+}
+
+.brand-title {
+  font-family: 'Dimod', sans-serif;
+  font-size: 2rem;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.back-button {
+  position: absolute;
+  left: 24px;
+  background: rgba(240,109,48,0.9);
+  border: 1px solid var(--accent);
+  border-radius: 8px;
+  padding: 8px 16px;
+  color: rgba(255, 255, 255, 0.9);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: inherit;
+  font-size: 0.9rem;
+}
+
+.back-button:hover {
+  background: rgba(240, 109, 48, 0.2);
+  border-color: rgba(240, 109, 48, 0.9);
+}
+
+.device {
+  width: var(--device-width);
+  max-width: calc(100vw - 48px);
+  border-radius: var(--device-radius);
+  padding: var(--device-padding);
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  overflow: visible;
+  height: auto;
+  margin: 0 auto;            /* center horizontally */
+}
+
+/* Info box */
+.info-box {
+  background-color: rgba(255, 255, 255, 0.048);
+  border: solid 0.1px rgba(240, 109, 48, 0.534);
+  border-radius: 20px;
+  padding: 32px;               /* use symmetric padding, child can use its own spacing */
+  margin: 0 auto;
+  position: relative;
+  width: 70%;
+  max-width: 1100px;           /* <--- constrain how wide the card can grow */
+  box-sizing: border-box;
+}
+
+.info-body{
+  margin: 0;
+  color: rgba(255,255,255,0.9);
+  width: 100%;                 /* fill the card interior */
+  max-width: 100%;             /* ensure children can use full inner width */
+  line-height: 1.5;
+  font-family: Penmanship;
+  font-size: 15px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;         /* center Blocks inside the section */
+  gap: 18px;
+  padding: 0;                  /* keep horizontal spacing in the card's padding, not here */
+}

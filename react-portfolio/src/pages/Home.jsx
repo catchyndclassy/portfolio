@@ -19,9 +19,9 @@ const SECTIONS = [
       <>
         <Blocks
           items={[
-            {label: "Web Development", to:'/web-dev'},
-            {label: "Figma Design", to:'/figma-design'},
-            {label: "Blog Writing", to:'/blog-writing'}
+            {label: "Web Development", to:'/webdev'},
+            {label: "Figma Design", to:'/figma'},
+            {label: "Blog Writing", to:'/blog'}
           ]}
         />
       </>
