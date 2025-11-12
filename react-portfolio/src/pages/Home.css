@@ -1,67 +1,7 @@
 /* Home.css - stacked flow version
    - device-header (100px from top of body via margin)
    - device (centered and responsive)
-   - logo-scroll (last element with 20px spacing from document bottom)
 */
-
-/* reset & variables */
-:root {
-  --bg-fallback: transparent;
-
-  /* design / device sizing */
-  --device-width: 1280px;
-  --device-padding: 48px;
-  --device-radius: 14px;
-  --accent: rgba(240,109,48,0.9);
-
-  /* spacing targets requested */
-  --header-offset: 100px;   /* header distance from top of body */
-  --header-height: 76px;    /* header element height (for design/visual use) */
-  --logo-gap-bottom: 20px;  /* logo distance above bottom of document */
-  --logo-height: 72px;      /* logo bar height */
-}
-
-/* page-level: allow whole-page vertical scrolling */
-html, body {
-  height: 100%;
-  min-height: 100vh;        /* ensure document >= viewport height */
-  margin: 0;
-  padding: 0;
-  background: var(--bg-fallback);
-  font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  overflow-x: hidden;
-  overflow-y: auto; /* page scroll as a single unit */
-  box-sizing: border-box;
-}
-
-.home-container {
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh; /* Make this container fill the viewport height */
-}
-
-/* background layer */
-.bg-span {
-  position: fixed;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 0;
-  pointer-events: none;
-  overflow: hidden;
-  contain: paint;
-}
-.bg-span__inner,
-.bg-span__inner > * {
-  width: 100%;
-  height: 100svh;
-  min-height: 100vh;
-  display: block;
-}
-
-/* Header in normal flow but positioned so z-index works */
 .device-header {
   position: relative;            /* <-- important so z-index takes effect */
   z-index: 999;                  /* sit well above device & logo */
@@ -140,26 +80,6 @@ html, body {
   max-width: 1100px;           /* <--- constrain how wide the card can grow */
   box-sizing: border-box;
 }
-/* Logo scroll : last in document flow; margin-bottom ensures it's 20px above document bottom */
-.logo-scroll {
-  position: relative;                /* or static — keeps it in document flow */
-  margin: 40px auto 20px;           /* spacing above/below; bottom 20px from document end */
-  left: 0;
-  transform: none;
-  width: 100%;
-  max-width: calc(100vw - 48px);
-  height: var(--logo-height);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
-  box-sizing: border-box;
-  padding: 6px 12px;
-  background: transparent;
-  z-index: 10;
-  pointer-events: auto;
-}
-
 /* sections wrapper fills info-box */
 .sections {
   position: relative;

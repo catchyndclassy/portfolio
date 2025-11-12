@@ -1,7 +1,5 @@
 import React, { useState, useRef, useEffect, useCallback } from "react";
-import ColorBlend from "../components/backgrounds/ColorBlends";
 import Blocks from "../components/blocks/Blocks";
-import LogoLoop from "../components/logoScroll/LogoLoop";
 import "./Home.css";
 
 const SECTIONS = [
@@ -35,12 +33,6 @@ const SECTIONS = [
     title: "Contact",
     body: "I preserved your existing interaction logic (wheel, touch, keyboard) and accessibility attributes.Font names like Akira and Dimod are preserved but fallback fonts are included; ensure you load those custom fonts if you want their exact look.If you want a visible bezel (to mimic a laptop more strongly) I can add a darker outer frame around .device.If you want, I can also:Add a small resize handle or helper overlay that shows the current scaled pixel size for debugging.Change the aspect ratio to 16:10 (some laptops use that).Make the laptop viewport perfectly centered with a subtle bezel image.Want any of those tweaks?"
   }
-];
-
-const imageLogos = [
-  { src: "../src/assets/logos/githubLogo.png", alt: "GitHub", href: "https://github.com/catchyndclassy" },
-  { src: "../src/assets/logos/igLogo.png", alt: "Instagram", href: "https://www.instagram.com/catchyndclassy?igsh=cGJoaTFwOGI4MDRl&utm_source=qr " },
-  { src: "../src/assets/logos/linkedinLogo.png", alt: "LinkedIn", href: "https://company3.com" },
 ];
 
 export default function Home() {
@@ -118,24 +110,6 @@ export default function Home() {
 
   return (
     <>
-    <div className="home-container">
-      <div className="bg-span" aria-hidden="true">
-        <div className="bg-span__inner">
-          <ColorBlend
-            colors={["#d12c16ff"]}
-            rotation={-75}
-            speed={0.2}
-            scale={0.5}
-            frequency={1}
-            warpStrength={1}
-            mouseInfluence={1}
-            parallax={0.5}
-            noise={0.1}
-            transparent={false}
-          />
-        </div>
-      </div>
-
       {/* header in normal flow; margin-top implements the 100px offset from top of body */}
       <header className="device-header" aria-hidden="false">
         <div className="brand-title">Catchy &amp; Classy</div>
@@ -190,21 +164,6 @@ export default function Home() {
           </main>
         </div>
       </div>
-
-      {/* logo-scroll as last in flow; margin-bottom ensures it is 20px above the document end */}
-      <div className="logo-scroll" aria-hidden="false">
-        <LogoLoop
-          logos={imageLogos}
-          speed={120}
-          direction="left"
-          logoHeight={48}
-          gap={50}
-          hoverSpeed={0}
-          scaleOnHover
-          ariaLabel="Technology partners"
-        />
-      </div>
-    </div>
     </>
   );
 }
